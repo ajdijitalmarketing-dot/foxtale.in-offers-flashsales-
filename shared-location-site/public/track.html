@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Tracking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Socket.IO -->
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  const socket = io();
+
+  const room = new URLSearchParams(window.location.search).get("room");
+  socket.emit("join-room", room);
+
+  // Create map
+  const map = L.map("map").setView([20.5937, 78.9629], 5); // India default
+
+  // Load tiles
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "© OpenStreetMap"
+  }).addTo(map);
+
+  let marker;
+
+  socket.on("receive-location", data => {
+    console.log("Location received:", data);
+
+    if (!marker) {
+      marker = L.marker([data.lat, data.lng]).addTo(map);
+    } else {
+      marker.setLatLng([data.lat, data.lng]);
+    }
+
+    map.setView([data.lat, data.lng], 16);
+  });
+</script>
+
+</body>
+</html>

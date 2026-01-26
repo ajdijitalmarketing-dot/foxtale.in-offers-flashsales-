@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Link</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h2>Share This Link</h2>
+    <input id="link" readonly>
+    <br><br>
+    <a id="track" target="_blank">
+      <button>Open Tracking Map</button>
+    </a>
+  </div>
+</div>
+
+<script>
+  const room = Math.random().toString(36).slice(2,8);
+  document.getElementById("link").value =
+    location.origin + "/share.html?room=" + room;
+  document.getElementById("track").href =
+    location.origin + "/track.html?room=" + room;
+</script>
+
+</body>
+</html>
