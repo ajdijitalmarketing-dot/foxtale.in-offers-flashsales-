@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: system-ui;
-  background: url("bgimg.png") no-repeat center center fixed;
+  background: url("bgimg.png");
 }
 
 .container {
@@ -33,6 +33,7 @@ input {
   padding: 12px;
 }
 #map { height: 100vh; }
+
 
 
 
