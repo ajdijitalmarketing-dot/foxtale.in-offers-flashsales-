@@ -105,6 +105,9 @@ input {
 
 /* Small screens optimization */
 @media (max-width: 360px) {
+  body {
+    background: url("bgimg.png");
+  }
   .card {
     padding: 20px;
   }
@@ -113,4 +116,5 @@ input {
     font-size: 20px;
   }
 }
+
 
