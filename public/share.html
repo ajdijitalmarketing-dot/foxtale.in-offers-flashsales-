@@ -49,7 +49,7 @@
     navigator.geolocation.watchPosition(
       position => {
         socket.emit("send-location", {
-          room: room,
+          roomId: room,
           lat: position.coords.latitude,
           lng: position.coords.longitude
         });
@@ -84,3 +84,4 @@
 
 </body>
 </html>
+
