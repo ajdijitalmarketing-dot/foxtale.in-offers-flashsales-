@@ -104,7 +104,7 @@ input {
 }
 
 /* Small screens optimization */
-@media (max-width: 360px) {
+@media (max-width: 300px) {
   body {
     background: url("bgimg.png");
   }
