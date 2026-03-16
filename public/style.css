@@ -57,7 +57,7 @@ button,
   border-radius: 30px;
   background: #e11d48;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -104,7 +104,7 @@ input {
 }
 
 /* Small screens optimization */
-@media (max-width: 300px) {
+@media (max-width: 200px) {
   body {
     background: url("bgimg.png");
   }
@@ -116,7 +116,7 @@ input {
     font-size: 20px;
   }
   button {
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 
